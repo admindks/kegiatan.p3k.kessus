@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Kegiatan P3K — Dinkes Sleman 2026</title>
+<style>
+:root{--navy:#15345b;--blue:#2463eb;--teal:#0f9f91;--bg:#f3f6fb;--ink:#172b4d;--muted:#66758b;--line:#e4eaf2;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(120deg,#15345b,#2463a8);color:#fff;padding:26px max(20px,calc((100% - 1400px)/2));}
+.brand{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;opacity:.8;font-weight:700}.headrow{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}h1{font-size:clamp(23px,3vw,32px);margin:8px 0}.subtitle{opacity:.82;font-size:14px}
+button,.btn{border:0;border-radius:9px;padding:11px 15px;font-weight:700;cursor:pointer;font-size:13px}.primary{background:var(--blue);color:white}.headerbtn{background:#fff;color:var(--navy)}.secondary{background:#eaf0fa;color:#24436d}.danger{background:#fff0f0;color:#b42318}.wrap{max-width:1400px;margin:24px auto;padding:0 20px}.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.kpi{background:white;border:1px solid var(--line);border-radius:14px;padding:19px;box-shadow:0 3px 12px #172b4d08}.kpi .label{font-size:12px;color:var(--muted);font-weight:700}.kpi .num{font-size:30px;font-weight:800;margin:8px 0 3px}.kpi .hint{font-size:12px;color:var(--muted)}.panel{background:white;border:1px solid var(--line);border-radius:14px;margin-top:20px;overflow:hidden}.panelhead{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.panelhead h2{font-size:17px;margin:0}.filters{display:flex;gap:9px;flex-wrap:wrap;padding:15px 20px}.filters input,.filters select,.formgrid input,.formgrid select,.formgrid textarea{border:1px solid #d8e0ec;border-radius:8px;padding:10px 11px;font:inherit;font-size:13px;background:#fff;color:var(--ink)}.filters input{min-width:220px;flex:1}.filters select{min-width:145px}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:920px}th{text-align:left;background:#f8fafd;color:#61718a;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:13px 14px}td{padding:14px;border-top:1px solid #edf1f6;font-size:13px;vertical-align:top}tbody tr:hover{background:#fbfdff}.muted{color:var(--muted)}.status{display:inline-block;border-radius:30px;padding:5px 9px;font-size:11px;font-weight:800;background:#edf2f7;color:#56657a}.s-selesai{background:#dff7eb;color:#087443}.s-proses{background:#fff2d6;color:#8a5a00}.s-terjadwal{background:#e4edff;color:#214fc5}.s-batal{background:#ffe5e5;color:#b42318}.empty{text-align:center;padding:48px 20px;color:var(--muted)}.empty strong{display:block;color:var(--ink);font-size:16px;margin-bottom:8px}.actions{display:flex;gap:6px}.smallbtn{padding:7px 9px;font-size:11px}.footer{color:var(--muted);font-size:12px;padding:20px 2px}.modal{display:none;position:fixed;inset:0;background:#10243c80;z-index:5;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.dialog{background:white;border-radius:16px;width:min(720px,100%);max-height:92vh;overflow:auto;box-shadow:0 25px 70px #0003}.dialoghead{padding:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.dialoghead h2{margin:0;font-size:19px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:20px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;font-weight:700;color:#4d5f77}.field.full{grid-column:1/-1}.formgrid textarea{min-height:70px;resize:vertical}.dialogfoot{padding:16px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}.notice{margin:16px 20px 0;padding:12px 14px;background:#fff8e7;border:1px solid #f3dfaa;color:#775514;border-radius:9px;font-size:12px;line-height:1.5}
+@media(max-width:800px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding:0 12px}.kpi{padding:14px}.kpi .num{font-size:25px}}@media(max-width:480px){.kpis{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.headrow{align-items:flex-start}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Dinas Kesehatan Kabupaten Sleman</div>
+  <div class="headrow">
+    <div>
+      <h1>Dashboard Kegiatan P3K</h1>
+      <div class="subtitle">Agenda kegiatan dan pemantauan petugas • Tahun 2026</div>
+    </div>
+    <button class="headerbtn" onclick="openForm()">＋ Tambah Kegiatan</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="kpis">
+    <div class="kpi"><div class="label">TOTAL KEGIATAN</div><div class="num" id="total">0</div><div class="hint">Seluruh agenda tercatat</div></div>
+    <div class="kpi"><div class="label">TERJADWAL</div><div class="num" id="scheduled">0</div><div class="hint">Agenda menunggu pelaksanaan</div></div>
+    <div class="kpi"><div class="label">SELESAI</div><div class="num" id="done">0</div><div class="hint">Kegiatan telah terlaksana</div></div>
+    <div class="kpi"><div class="label">DALAM PROSES</div><div class="num" id="progress">0</div><div class="hint">Kegiatan sedang ditangani</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panelhead">
+      <h2>Agenda Kegiatan</h2>
+      <div class="actions">
+        <button class="secondary" onclick="exportCSV()">Ekspor CSV</button>
+        <button class="secondary" onclick="document.getElementById('importFile').click()">Impor CSV</button>
+        <input id="importFile" type="file" accept=".csv,text/csv" hidden onchange="importCSV(event)">
+        <button class="secondary" onclick="backupJSON()">Cadangkan JSON</button>
+      </div>
+    </div>
+    
+    <div class="filters">
+      <input id="search" placeholder="Cari kegiatan, pemohon, petugas, lokasi..." oninput="render()">
+      <select id="month" onchange="render()"><option value="">Semua bulan</option></select>
+      <select id="statusFilter" onchange="render()">
+        <option value="">Semua status</option>
+        <option>Terjadwal</option>
+        <option>Dalam Proses</option>
+        <option>Selesai</option>
+        <option>Batal</option>
+      </select>
+      <button class="secondary" onclick="clearFilters()">Reset filter</button>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>No.</th><th>Tanggal</th><th>Nama Kegiatan</th><th>Pemohon</th><th>Petugas</th><th>Lokasi</th><th>Status</th><th>Aksi</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div id="empty" class="empty">
+        <strong>Belum ada data kegiatan</strong>
+        Tambahkan agenda pertama atau impor data CSV untuk mulai menggunakan dashboard.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Data disimpan di penyimpanan browser pada perangkat ini. Gunakan “Cadangkan JSON” secara berkala agar data tidak hilang saat browser dibersihkan. Untuk berbagi antarperangkat, diperlukan penyimpanan bersama atau server.</div>
+</main>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeForm()">
+  <div class="dialog">
+    <div class="dialoghead">
+      <h2 id="formTitle">Tambah Kegiatan</h2>
+      <button class="secondary" onclick="closeForm()">✕</button>
+    </div>
+    <form id="activityForm" onsubmit="saveForm(event)">
+      <div class="formgrid">
+        <input type="hidden" id="editId">
+        <div class="field"><label for="date">Tanggal kegiatan *</label><input id="date" type="date" required></div>
+        <div class="field"><label for="monthInput">Bulan</label><select id="monthInput"><option value="">Otomatis dari tanggal</option></select></div>
+        <div class="field full"><label for="name">Nama kegiatan *</label><input id="name" required placeholder="Contoh: Dukungan P3K kegiatan masyarakat"></div>
+        <div class="field"><label for="requester">Pemohon</label><input id="requester" placeholder="Nama instansi / pemohon"></div>
+        <div class="field"><label for="officer">Petugas</label><input id="officer" placeholder="Nama petugas P3K"></div>
+        <div class="field full"><label for="location">Lokasi</label><input id="location" placeholder="Lokasi kegiatan"></div>
+        <div class="field"><label for="statusInput">Status</label><select id="statusInput"><option>Terjadwal</option><option>Dalam Proses</option><option>Selesai</option><option>Batal</option></select></div>
+        <div class="field"><label for="notes">Catatan</label><input id="notes" placeholder="Catatan tambahan (opsional)"></div>
+      </div>
+      <div class="dialogfoot">
+        <button type="button" class="secondary" onclick="closeForm()">Batal</button>
+        <button class="primary" type="submit">Simpan Kegiatan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const months=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+let activities=[];
+try{activities=JSON.parse(localStorage.getItem('p3k_activities_2026')||'[]')}catch(e){activities=[]}
+const $=id=>document.getElementById(id);
+months.forEach((m,i)=>{$('month').add(new Option(m,String(i+1).padStart(2,'0')));$('monthInput').add(new Option(m,m))});
+function persist(){localStorage.setItem('p3k_activities_2026',JSON.stringify(activities))}
+function statusClass(s){return {'Selesai':'s-selesai','Dalam Proses':'s-proses','Terjadwal':'s-terjadwal','Batal':'s-batal'}[s]||''}
+function render(){
+ const q=$('search').value.toLowerCase(), mo=$('month').value, st=$('statusFilter').value;
+ const filtered=activities.filter(a=>(!mo||(a.date||'').slice(5,7)===mo)&&(!st||a.status===st)&&[a.name,a.requester,a.officer,a.location,a.notes].join(' ').toLowerCase().includes(q)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+ $('total').textContent=activities.length;$('scheduled').textContent=activities.filter(a=>a.status==='Terjadwal').length;$('done').textContent=activities.filter(a=>a.status==='Selesai').length;$('progress').textContent=activities.filter(a=>a.status==='Dalam Proses').length;
+ $('rows').innerHTML=filtered.map((a,i)=>`<tr><td>${i+1}</td><td>${esc(formatDate(a.date))}</td><td><strong>${esc(a.name)}</strong>${a.notes?`<div class="muted" style="margin-top:5px">${esc(a.notes)}</div>`:''}</td><td>${esc(a.requester||'—')}</td><td>${esc(a.officer||'—')}</td><td>${esc(a.location||'—')}</td><td><span class="status ${statusClass(a.status)}">${esc(a.status)}</span></td><td><div class="actions"><button class="secondary smallbtn" onclick="editActivity('${a.id}')">Edit</button><button class="danger smallbtn" onclick="deleteActivity('${a.id}')">Hapus</button></div></td></tr>`).join('');
+ $('empty').style.display=filtered.length?'none':'block';
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function formatDate(s){if(!s)return '—';let d=new Date(s+'T00:00:00');return d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}
+function openForm(){ $('activityForm').reset();$('editId').value='';$('formTitle').textContent='Tambah Kegiatan';$('statusInput').value='Terjadwal';$('modal').classList.add('open')}
+function closeForm(){$('modal').classList.remove('open')}
+function saveForm(e){e.preventDefault();const id=$('editId').value\vert{}\vert{}String(Date.now())+Math.random().toString(16).slice(2,6);const item={id,date:$('date').value,name:$('name').value.trim(),requester:$('requester').value.trim(),officer:$('officer').value.trim(),location:$('location').value.trim(),status:$('statusInput').value,notes:$('notes').value.trim()};const ix=activities.findIndex(a=>a.id===id);if(ix>=0)activities[ix]=item;else activities.push(item);persist();closeForm();render()}
+function editActivity(id){const a=activities.find(x=>x.id===id);if(!a)return;openForm();$('editId').value=a.id;$('date').value=a.date\vert{}\vert{}'';$('name').value=a.name||'';$('requester').value=a.requester\vert{}\vert{}'';$('officer').value=a.officer||'';$('location').value=a.location\vert{}\vert{}'';$('statusInput').value=a.status||'Terjadwal';$('notes').value=a.notes\vert{}\vert{}'';$('formTitle').textContent='Edit Kegiatan'}
+function deleteActivity(id){const a=activities.find(x=>x.id===id);if(a&&confirm('Hapus kegiatan "'+a.name+'"?')){activities=activities.filter(x=>x.id!==id);persist();render()}}
+function clearFilters(){$('search').value='';$('month').value='';$('statusFilter').value='';render()}
+function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function exportCSV(){const header=['Tanggal','Nama Kegiatan','Pemohon','Petugas','Lokasi','Status','Catatan'];const lines=[header,...activities.map(a=>[a.date,a.name,a.requester,a.officer,a.location,a.status,a.notes])].map(r=>r.map(csvCell).join(','));download('\ufeff'+lines.join('\r\n'),'agenda_kegiatan_p3k_2026.csv','text/csv;charset=utf-8;')}
+function download(content,name,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+function backupJSON(){download(JSON.stringify(activities,null,2),'cadangan_dashboard_p3k.json','application/json')}
+function importCSV(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const text=String(reader.result).replace(/^\uFEFF/,'');const lines=text.split(/\r?\n/).filter(x=>x.trim());if(lines.length<2)throw Error('File CSV kosong');const parse=line=>{let out=[],cur='',quoted=false;for(let i=0;i<line.length;i++){let c=line[i];if(c==='"'&&line[i+1]==='"'&&quoted){cur+='"';i++}else if(c==='"')quoted=!quoted;else if(c===','&&!quoted){out.push(cur);cur=''}else cur+=c}out.push(cur);return out};const h=parse(lines[0]).map(x=>x.toLowerCase().trim());const find=(...keys)=>h.findIndex(x=>keys.some(k=>x.includes(k)));const ix={date:find('tanggal','date'),name:find('nama kegiatan','kegiatan','name'),requester:find('pemohon','requester'),officer:find('petugas','officer'),location:find('lokasi','location'),status:find('status'),notes:find('catatan','notes')};if(ix.name<0)throw Error('Kolom Nama Kegiatan tidak ditemukan');let added=0;for(const line of lines.slice(1)){const r=parse(line),get=k=>ix[k]>=0?(r[ix[k]]||'').trim():'';let date=get('date');if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)){let [d,m,y]=date.split('/');date=`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`}let status=get('status');if(!['Terjadwal','Dalam Proses','Selesai','Batal'].includes(status))status='Terjadwal';if(get('name')){activities.push({id:String(Date.now())+Math.random().toString(16).slice(2),date,name:get('name'),requester:get('requester'),officer:get('officer'),location:get('location'),status,notes:get('notes')});added++}}persist();render();alert(added+' kegiatan berhasil diimpor.')}catch(e){alert('Gagal mengimpor CSV: '+e.message)}ev.target.value=''};reader.readAsText(f)}
+render();
+</script>
+</body>
+</html>
