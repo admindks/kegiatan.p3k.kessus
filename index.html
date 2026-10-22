@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<script>
+    // Cek apakah sudah login atau belum
+    if (sessionStorage.getItem("isLoggedIn") !== "true") {
+        // Jika belum, lempar kembali ke halaman login.html
+        window.location.href = "login.html";
+    }
+</script>
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -128,6 +135,12 @@ function download(content,name,type){const blob=new Blob([content],{type}),url=U
 function backupJSON(){download(JSON.stringify(activities,null,2),'cadangan_dashboard_p3k.json','application/json')}
 function importCSV(ev){const f=ev.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const text=String(reader.result).replace(/^\uFEFF/,'');const lines=text.split(/\r?\n/).filter(x=>x.trim());if(lines.length<2)throw Error('File CSV kosong');const parse=line=>{let out=[],cur='',quoted=false;for(let i=0;i<line.length;i++){let c=line[i];if(c==='"'&&line[i+1]==='"'&&quoted){cur+='"';i++}else if(c==='"')quoted=!quoted;else if(c===','&&!quoted){out.push(cur);cur=''}else cur+=c}out.push(cur);return out};const h=parse(lines[0]).map(x=>x.toLowerCase().trim());const find=(...keys)=>h.findIndex(x=>keys.some(k=>x.includes(k)));const ix={date:find('tanggal','date'),name:find('nama kegiatan','kegiatan','name'),requester:find('pemohon','requester'),officer:find('petugas','officer'),location:find('lokasi','location'),status:find('status'),notes:find('catatan','notes')};if(ix.name<0)throw Error('Kolom Nama Kegiatan tidak ditemukan');let added=0;for(const line of lines.slice(1)){const r=parse(line),get=k=>ix[k]>=0?(r[ix[k]]||'').trim():'';let date=get('date');if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)){let [d,m,y]=date.split('/');date=`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`}let status=get('status');if(!['Terjadwal','Dalam Proses','Selesai','Batal'].includes(status))status='Terjadwal';if(get('name')){activities.push({id:String(Date.now())+Math.random().toString(16).slice(2),date,name:get('name'),requester:get('requester'),officer:get('officer'),location:get('location'),status,notes:get('notes')});added++}}persist();render();alert(added+' kegiatan berhasil diimpor.')}catch(e){alert('Gagal mengimpor CSV: '+e.message)}ev.target.value=''};reader.readAsText(f)}
 render();
+<button onclick="logout()">Keluar</button>
+<script>
+    function logout() {
+        sessionStorage.removeItem("isLoggedIn");
+        window.location.href = "login.html";
+    }
 </script>
 </body>
 </html>
