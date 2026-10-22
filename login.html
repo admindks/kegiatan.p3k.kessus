@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Dashboard P3K</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
+        .login-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; font-size: 12px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Login Petugas</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="handleLogin()">Masuk</button>
+        <div id="error-msg" class="error"></div>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            // Ganti username dan password sesuai keinginan Anda
+            if (user === "admin" && pass === "p3ksleman2026") {
+                // Simpan status login di Session Storage browser
+                sessionStorage.setItem("isLoggedIn", "true");
+                // Arahkan ke halaman utama/dashboard
+                window.location.href = "index.html"; 
+            } else {
+                document.getElementById('error-msg').innerText = "Username atau Password salah!";
+            }
+        }
+    </script>
+</body>
+</html>
